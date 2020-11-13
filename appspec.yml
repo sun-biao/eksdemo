@@ -1,0 +1,29 @@
+version: 0.0
+os: linux
+files:
+  - source: hello-k8s.yml
+    destination: /home/ec2-user/code
+permissions:
+  - object: /home/ec2-user/code/
+    pattern: "*.*"
+    owner: ec2-user
+    group: ec2-user
+    mode: 755
+    type:
+      - file
+  - object: /home/ec2-user/code
+    group: ec2-user
+    mode: 755
+    type:
+      - directory
+hooks:
+  BeforeInstall:
+    - location: scripts/b4ins.sh
+  AfterInstall:
+    - location: scripts/afins.sh
+      timeout: 180
+  ApplicationStart:
+    - location: scripts/appst.sh
+      runas: ec2-user
+  ValidateService:
+    - location: scripts/validate.sh
